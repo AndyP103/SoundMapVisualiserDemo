@@ -156,3 +156,8 @@ canvas{
 	margin-bottom: 15px;
 	border-radius: 5px;
 }
+
+br {
+	display: block;
+	margin: 5px 0;
+}
