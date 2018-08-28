@@ -234,47 +234,59 @@ function load_data_from_fs_json(data, source_type, reverb_type){
     } else {
         // a source type is defined, use only that source type
         //TODO Filter this by reverb_type
-        for (i in data['results']){
+        for (i in data['results']) {
             var sound_json = data['results'][i];
-            var this_name = sound_json['name'];
-            var this_source_type = sound_json['source_type'];
-            var source_match = false;
-            if (source_type.startsWith('-')){
-                var array_source_type = source_type.split('-');
-                for (j in array_source_type){
-                    if (array_source_type[j] == this_source_type){
-                        source_match = true;
+            var reverb_match = false;
+            if (sound_json['analysis'] != undefined) {
+                if (reverb_type == "all") {
+                    reverb_match = true
+                } else {
+                    if (sound_json['analysis']['timbre']['reverb'] == reverb_type) {
+                        reverb_match = true
                     }
                 }
-            } else {
-                if (this_source_type == source_type) {
-                    source_match = true;
-                }
-            }
-            // get the reverberant charadteristic of the sound and compare to json file
-            if (source_type.startsWith('-')){
-                var array_source_type = source_type.split('-');
-                for (j in array_source_type){
-                    if (array_source_type[j] == this_source_type){
-                        source_match = true;
+                if (reverb_match) {
+                    var this_name = sound_json['name'];
+                    var this_source_type = sound_json['source_type'];
+                    var source_match = false;
+                    if (source_type.startsWith('-')) {
+                        var array_source_type = source_type.split('-');
+                        for (j in array_source_type) {
+                            if (array_source_type[j] == this_source_type) {
+                                source_match = true;
+                            }
+                        }
+                    } else {
+                        if (this_source_type == source_type) {
+                            source_match = true;
+                        }
+                    }
+                    // get the reverberant charadteristic of the sound and compare to json file
+                    if (source_type.startsWith('-')) {
+                        var array_source_type = source_type.split('-');
+                        for (j in array_source_type) {
+                            if (array_source_type[j] == this_source_type) {
+                                source_match = true;
+                            }
+                        }
+                    } else {
+                        if (this_source_type == source_type) {
+                            source_match = true;
+                        }
+                    }
+                    if ((sound_json['analysis'] != undefined) && source_match) {
+                        var sound = new SoundFactory(
+                            id = sound_json['id'],
+                            preview_url = sound_json['audio'] || sound_json['previews']['preview-lq-mp3'],
+                            analysis = sound_json['analysis'],
+                            url = sound_json['url'],
+                            name = sound_json['name'],
+                            username = sound_json['username'],
+                            image = sound_json['image'] || sound_json['images']['spectral_m'],
+                        );
+                        sounds.push(sound);
                     }
                 }
-            } else {
-                if (this_source_type == source_type) {
-                    source_match = true;
-                }
-            }
-            if ((sound_json['analysis'] != undefined) && source_match){
-            var sound = new SoundFactory(
-                id=sound_json['id'],
-                preview_url=sound_json['audio'] || sound_json['previews']['preview-lq-mp3'],
-                analysis=sound_json['analysis'],
-                url=sound_json['url'],
-                name=sound_json['name'],
-                username=sound_json['username'],
-                image=sound_json['image'] || sound_json['images']['spectral_m'],
-            );
-            sounds.push(sound);
             }
         }
     }
