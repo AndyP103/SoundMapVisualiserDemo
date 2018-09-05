@@ -67,6 +67,7 @@ function start(){
     canvas.addEventListener("mousedown", onMouseDown, false);
     canvas.addEventListener("mouseup", onMouseUp, false);
     canvas.addEventListener("mouseout", onMouseOut, false);
+    canvas.addEventListener("wheel", onWheel, false);
     center_x = 0.5;
     center_y = 0.5;
     zoom_factor = 1.0;

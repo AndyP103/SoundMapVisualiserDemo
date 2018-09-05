@@ -2,6 +2,23 @@ var previous_move_x = 0;
 var previous_move_y = 0;
 var start_mouse_down_time = 0;
 var play_on_hover = false;
+var wheel_zoom = true;
+
+function onWheel(event){
+    // canvas.removeEventListener("mousemove", onMouseMove, false);
+    var e = window.event || event; // old IE support
+    var delta = e.deltaY;
+
+    if (wheel_zoom) {
+        zoom_factor -= delta * 0.05; //delta_zoom / ((w + h)/2);
+        if (zoom_factor < min_zoom) {
+            zoom_factor = min_zoom;
+        } else if (zoom_factor > max_zoom){
+            zoom_factor = max_zoom;
+        }
+    }
+}
+
 
 
 function onKeyDown(event){
@@ -122,3 +139,4 @@ function throttle(fn, threshhold, scope) {
         }
     };
 }
+
